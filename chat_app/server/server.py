@@ -39,11 +39,9 @@ def client_communication(person):
     """
 
     client = person.client
-    addr = person.addr
 
     # Get person's name
     name = client.recv(BUFSIZ).decode("utf8")
-    print(name)
     person.set_name(name)
     msg = bytes(f"{name} has joined the chat!", "utf8")
     broadcast(msg, "")
@@ -55,14 +53,14 @@ def client_communication(person):
             if msg == bytes("quit", "utf8"):
                 client.close()
                 persons.remove(person)
-                broadcast(f"{name} has left the chat...", "")
+                broadcast(bytes(f"{name} has left the chat...","utf8"), "")
                 print(f"[DISCONNECTED] {name} disconnected")
                 run = False
             else:
                 print(f"{name} : ", msg.decode("utf8"))
                 broadcast(msg, name + ": ")
         except Exception as e:
-            print("[EXCEPTION]", e)
+            print("[EXCEPTION]1", e)
             run = False
 
 def wait_for_connection():
@@ -81,7 +79,7 @@ def wait_for_connection():
             print(f"[CONNECTION] {client_addr} connected to the server at {time.time()}")
             Thread(target=client_communication, args=(person,)).start()
         except Exception as e:
-            print("[EXCEPTION]", e)
+            print("[EXCEPTION]2", e)
             run = False
     print("SERVER CRASHED")
 

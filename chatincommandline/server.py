@@ -29,7 +29,6 @@ def broadcast(msg, name):
     for person in persons:
         client = person.client
         if (person.name + ": ") != name:
-            print(f"{person.name} vs {name}")
             client.send(bytes(name, "utf8") + msg)
 
 
@@ -45,7 +44,6 @@ def client_communication(person):
 
     # Get person's name
     name = client.recv(BUFSIZ).decode("utf8")
-    print(name)
     person.set_name(name)
     msg = bytes(f"{name} has joined the chat!", "utf8")
     broadcast(msg, "")
@@ -57,7 +55,7 @@ def client_communication(person):
             if msg == bytes("quit", "utf8"):
                 client.close()
                 persons.remove(person)
-                broadcast(f"{name} has left the chat...", "")
+                broadcast(bytes(f"{name} has left the chat...","utf8"), "")
                 print(f"[DISCONNECTED] {name} disconnected")
                 run = False
             else:
