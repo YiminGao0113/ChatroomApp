@@ -39,11 +39,19 @@ def send_message(msg):
         client_socket.close()
 
 
+if __name__ == '__main__':
+    receive_thread = Thread(target=receive_messages)
+    receive_thread.start()
+    name = ""
+    noname = True
+    while True:
+        if noname:
+            name = input("Please enter your name: ")
+            message = name
+            noname = False
+        else:
+            message = input(f"{name} : ")
 
-receive_thread = Thread(target=receive_messages)
-receive_thread.start()
-send_message("Tom")
-time.sleep(5)
-send_message("Hey there!")
-time.sleep(5)
-send_message("quit")
+        send_message(message)
+        if message == "quit":
+            break
