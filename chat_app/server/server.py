@@ -8,7 +8,7 @@ from person import Person
 # One for sending messages
 
 # GLOBAL CONSTANTS
-HOST = '192.168.2.126'
+HOST = '0.0.0.0'
 PORT = 5500
 ADDR = (HOST, PORT)
 MAX_CONNECTIONS = 10
