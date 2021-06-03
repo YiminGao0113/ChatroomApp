@@ -1,5 +1,6 @@
 # import all the required modules
 import socket
+import sys
 import threading
 from tkinter import *
 from tkinter import font
@@ -16,6 +17,7 @@ class GUI:
     def __init__(self):
 
         # chat window which is currently hidden
+        self.run = 1
         self.Window = Tk()
         self.Window.withdraw()
 
@@ -134,7 +136,7 @@ class GUI:
 
         # place the given widget
         # into the gui window
-        self.entryMsg.place(relwidth=0.74,
+        self.entryMsg.place(relwidth=0.64,
                             relheight=0.06,
                             rely=0.008,
                             relx=0.011)
@@ -145,14 +147,26 @@ class GUI:
         self.buttonMsg = Button(self.labelBottom,
                                 text="Send",
                                 font="Helvetica 10 bold",
-                                width=20,
+                                width=5,
                                 bg="#ABB2B9",
                                 command=lambda: self.sendButton(self.entryMsg.get()))
 
-        self.buttonMsg.place(relx=0.77,
+        self.buttonMsg.place(relx=0.67,
                              rely=0.008,
                              relheight=0.06,
-                             relwidth=0.22)
+                             relwidth=0.15)
+
+        self.buttonExit = Button(self.labelBottom,
+                                 text="Exit",
+                                 font="Helvetica 10 bold",
+                                 width=5,
+                                 bg="#ABB2B9",
+                                 command=lambda: self.exitButton())
+
+        self.buttonExit.place(relx=0.83,
+                             rely=0.008,
+                             relheight=0.06,
+                             relwidth=0.15)
 
         self.textCons.config(cursor="arrow")
 
@@ -174,7 +188,10 @@ class GUI:
         self.msg = msg
         self.entryMsg.delete(0, END)
         self.client.send_message(msg)
-
+    def exitButton(self):
+        self.client.send_message("quit")
+        self.Window.destroy()
+        self.run = 0
     # function to receive messages
     def receive(self):
 
@@ -203,7 +220,12 @@ class GUI:
                 print("An error occured!")
                 break
 
+
         # create a GUI class object
 
 
 g = GUI()
+while True:
+    if g.run == 0:
+        break
+sys.exit(0)

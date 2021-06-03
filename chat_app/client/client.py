@@ -6,7 +6,7 @@ class Client:
     """
     for communication with server
     """
-    HOST = "192.168.2.126"
+    HOST = "212.129.246.116"
     PORT = 5500
     ADDR = (HOST, PORT)
     BUFSIZ = 512
