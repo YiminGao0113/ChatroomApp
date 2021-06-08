@@ -1,19 +1,10 @@
-# import all the required modules
-import socket
 import sys
-import threading
-from tkinter import *
-from tkinter import font
-from tkinter import ttk
-from client import Client
 import time
+from client import Client
 from threading import Thread
+from tkinter import *
 
-
-
-# GUI class for the chat
 class GUI:
-    # constructor method
     def __init__(self):
 
         # chat window which is currently hidden
@@ -59,6 +50,7 @@ class GUI:
 
         # set the focus of the curser
         self.entryName.focus()
+        self.entryName.bind('<Return>', self.login_enter)
 
         # create a Continue Button
         # along with action
@@ -69,7 +61,11 @@ class GUI:
 
         self.go.place(relx=0.4,
                       rely=0.55)
+
         self.Window.mainloop()
+
+    def login_enter(self, event):
+    	self.goAhead(self.entryName.get())
 
     def goAhead(self, name):
         self.login.destroy()
@@ -78,7 +74,7 @@ class GUI:
         self.client = Client(name)
 
         # the thread to receive messages
-        rcv = threading.Thread(target=self.receive)
+        rcv = Thread(target=self.receive)
         rcv.start()
 
     # The main layout of the chat
@@ -142,7 +138,7 @@ class GUI:
                             relx=0.011)
 
         self.entryMsg.focus()
-
+        self.entryMsg.bind('<Return>',self.press_enter)
         # create a Send Button
         self.buttonMsg = Button(self.labelBottom,
                                 text="Send",
@@ -183,15 +179,20 @@ class GUI:
         self.textCons.config(state=DISABLED)
 
     # function to basically start the thread for sending messages
+    def press_enter(self, event):
+    	self.sendButton(self.entryMsg.get())
+
     def sendButton(self, msg):
         self.textCons.config(state=DISABLED)
         self.msg = msg
         self.entryMsg.delete(0, END)
         self.client.send_message(msg)
+
     def exitButton(self):
         self.client.send_message("quit")
         self.Window.destroy()
         self.run = 0
+
     # function to receive messages
     def receive(self):
 
